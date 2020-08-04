@@ -1,0 +1,62 @@
+# References:
+# https://code.visualstudio.com/docs/remote/create-dev-container#_using-docker-compose
+
+version: '3.2'
+services:
+  web:
+    # Uncomment the next line to use a non-root user for all processes.
+    # See https://aka.ms/vscode-remote/containers/non-root for details.
+    # user: node
+
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Update VARIANT to pick a node version: 14, 12, 10
+        VARIANT: 12
+        # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
+        USER_UID: 1000
+        USER_GID: 1000
+
+    # Mount volume. [source:]target[:mode]
+    volumes:
+      - ..:/workspace:cached
+      
+    # DO NOT UNDERSTAND~!!!
+    # Overrides default command so things don't shut down after the process ends.
+    # Avoid having the container shut down if the default container command fails or exits.
+    command: sleep infinity
+    # command: /bin/sh -c "while sleep 1000; do :; done"
+
+    # Link to containers in another service.
+    # Legacy feature to be deprecated. Use user-defined networks instead.
+    # links:
+    #   - db
+
+  db:
+    image: postgres
+    # Container name. Must be unique.
+    container_name: BookSearch-DataBase
+    # Restart policy: no(default)|always|on-failure|unless-stopped
+    restart: unless-stopped
+
+    # Expose ports.
+    # Short syntax: HOST:CONTAINER
+    # Result: 0.0.0.0:<HOST> -> <CONTAINER>/tcp
+    # ports: 
+    #   - "5432:5432"
+
+    # Long syntax
+    # Result: 0.0.0.0:<published> -> <target>/<protocal>
+    ports:
+      - target: 5432
+        published: 5432
+        protocol: tcp
+        mode: host
+        
+    # See: https://hub.docker.com/_/postgres
+    environment:
+      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: user
+      POSTGRES_DB: books
+ 

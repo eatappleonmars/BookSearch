@@ -1,0 +1,49 @@
+// References:
+// https://code.visualstudio.com/docs/remote/create-dev-container#_using-docker-compose
+
+// If you want to run as a non-root user in the container, see .devcontainer/docker-compose.yml.
+{
+	// [General]
+	// A display name for the container.
+	"name": "BookSearch - Node.js & PostgreSQL", 
+
+	// [Docker Compose]
+	// Required. Path or an ordered list of paths to Docker Compose files relative to the devcontainer.json file.
+	"dockerComposeFile": "docker-compose.yml",
+
+	// [Docker Compose]
+	// Required. The name of the service VS Code should connect to once running.
+	"service": "web", // required
+
+	// [Docker Compose]
+	// Sets the default path that VS Code should open when connecting to the container 
+	"workspaceFolder": "/workspace", // optional
+
+	// [General]
+	// Adds default settings.json values into a container/machine specific settings file.
+	// MyNote: this refers to VSCode settings.json, reference:
+	//   https://code.visualstudio.com/docs/getstarted/settings
+	"settings": { 
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+
+	// [General]
+	// Add the IDs of VSCode extensions you want installed when the container is created.
+	"extensions": [
+		"dbaeumer.vscode-eslint"
+	],
+
+	// Uncomment the next line if you want start specific services in your Docker Compose config.
+	// "runServices": [],
+
+	// Uncomment the line below if you want to keep your containers running after VS Code shuts down.
+	// "shutdownAction": "none",
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
+
+	// [Dockerfile / image / Docker Compose	]
+	// Overrides the user that VS Code runs as in the container
+	// See https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "node"
+}
